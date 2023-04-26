@@ -46,7 +46,7 @@ def start(update, context):
 
 def collect_message(update, context):
     message = update.message
-    username = message.from_user.username
+    username = message.chat.username
     chat_id = message.chat_id
     chat_type = message.chat.type
     text = message.text
