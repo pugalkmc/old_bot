@@ -6,6 +6,7 @@ from typing import List
 
 import openpyxl
 import firebase_admin
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from firebase_admin import credentials, db
 from openpyxl.styles import Alignment
 from telegram import *
@@ -41,8 +42,8 @@ async def collect_message(update, context):
     text = message.text
 
     member_list = ["srikanth084", "Jellys04", "Cryptomaker143",
-               "Shankar332", "Royce73", "Balaharishb",
-               "SaranKMC","Sakthi_TVL"]
+                   "Shankar332", "Royce73", "Balaharishb",
+                   "SaranKMC", "Sakthi_TVL"]
 
     if chat_type == "private":
         if "get " in message.text and len(text) > 6:
@@ -50,8 +51,7 @@ async def collect_message(update, context):
             await selva_sheet(update=update, context=context, date=text)
         elif username not in members:
             await bot.send_message(chat_id=chat_id, text="You have no permission to use this bot")
-            
-            
+
             return
         if "spreadsheet admin" in text:
             int_org = text.replace("spreadsheet", "")
@@ -139,12 +139,16 @@ async def selva_sheet(update, context, admin=None, date=None):
     await bot.send_document(chat_id=1292480260, document=open(f"{collection_name}.xlsx", "rb"))
 
 
-async def save_to_spreadsheet(update, context, admin=None, date=None):
+async def save_to_spreadsheet(update=None, context=None, admin=None, date=None):
     collection_name = date if date else datetime.now().strftime("%Y-%m-%d")
+    if update is None:
+        chat_id = 1291659507
+    else:
+        chat_id = update.message.chat_id
 
     messages = db.reference(f'messages/{collection_name}').get() or {}
     if len(messages) == 0 or messages is None:
-        await bot.send_message(chat_id=1291659507, text="Hey! ,No message found for today")
+        await bot.send_message(chat_id=chat_id, text="Hey! ,No message found for today")
 
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -188,17 +192,18 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
     await bot.send_message(chat_id=update.message.chat_id, text=f"Total Messages: {len(messages.items())}\n\n{msg}")
 
     if admin is not None and "group" in admin:
-        await bot.send_message(chat_id=-1001586628789, text=f"Count for {collection_name}: {len(messages.items())}\n\n{msg}")
+        await bot.send_message(chat_id=-1001586628789,
+                               text=f"Count for {collection_name}: {len(messages.items())}\n\n{msg}")
 
     ws["F1"] = "Usernames"
     ws["G1"] = "Count"
 
     member_list = ["srikanth084", "Jellys04", "Cryptomaker143",
-               "Shankar332", "Royce73", "Balaharishb",
-               "SaranKMC","Sakthi_TVL"]
+                   "Shankar332", "Royce73", "Balaharishb",
+                   "SaranKMC", "Sakthi_TVL"]
 
     index = 0
-    for row in range(2, len(member_list)+2):
+    for row in range(2, len(member_list) + 2):
         count = '=COUNTIF(A:A,"*' + member_list[index] + '*")'
         ws.cell(row=row, column=6).value = member_list[index]
         ws.cell(row=row, column=7).value = count
@@ -207,7 +212,7 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
     file_name = f"{collection_name}.xlsx"
     wb.save(file_name)
     if admin is None:
-        await bot.send_document(chat_id=update.message.chat_id, document=open(file_name, 'rb'))
+        await bot.send_document(chat_id=chat_id, document=open(file_name, 'rb'))
     if admin is not None and "admin" in admin:
         if "group" in admin:
             await bot.send_document(chat_id=-1001586628789, document=open(file_name, "rb"))
@@ -215,11 +220,23 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
             await bot.send_document(chat_id=i, document=open(file_name, "rb"))
 
 
+def run_spreadsheet_job():
+    save_to_spreadsheet(admin="group")
+
+
+def schedule_spreadsheet_job():
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(run_spreadsheet_job, 'cron', hour=14, minute=47, second=0, timezone='Asia/Kolkata')
+    scheduler.start()
+
 
 BOT_TOKEN = "6208523031:AAFfOb97T6Wml0pZUagE56A_MZDpCpUXZJk"
 
+
 def main():
     dp = Application.builder().token(BOT_TOKEN).build()
+    import threading
+    threading.Thread(target=schedule_spreadsheet_job).start()
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("spreadsheet", save_to_spreadsheet))
     dp.add_handler(MessageHandler(filters.TEXT, collect_message))
