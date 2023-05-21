@@ -198,7 +198,7 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
                "SaranKMC","Sakthi_TVL"]
 
     index = 0
-    for row in range(2, len(member_list)+1):
+    for row in range(2, len(member_list)+2):
         count = '=COUNTIF(A:A,"*' + member_list[index] + '*")'
         ws.cell(row=row, column=6).value = member_list[index]
         ws.cell(row=row, column=7).value = count
