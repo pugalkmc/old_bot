@@ -13,15 +13,7 @@ from telegram.ext import *
 from openpyxl.formula import Tokenizer
 from openpyxl.utils.cell import get_column_letter
 import os
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
 from openpyxl import Workbook
-
-import google.auth
-
-# Set up the YouTube API client
-api_key = 'YOUR_API_KEY'
-youtube = build('youtube', 'v3', developerKey=api_key)
 
 cred = credentials.Certificate("kit-pro-f4b0d-firebase-adminsdk-mhzrf-8a07acab1c.json")
 firebase_admin.initialize_app(cred, {
@@ -232,7 +224,7 @@ def main():
     dp = Application.builder().token(BOT_TOKEN).build()
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("spreadsheet", save_to_spreadsheet))
-    dp.add_handler(MessageHandler(Filters.text, collect_message))
+    dp.add_handler(MessageHandler(filters.Text, collect_message))
     dp.run_polling()
 
 
