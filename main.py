@@ -39,7 +39,7 @@ async def collect_message(update, context):
     chat_type = message.chat.type
     text = message.text
 
-    members = await bot.get_chat_members(-1588000922)
+    members = await Bot.get_chat_members(-1588000922)
 
     member_list = []
     for member in members:
@@ -194,7 +194,7 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
     ws["F1"] = "Usernames"
     ws["G1"] = "Count"
 
-    members = await bot.get_chat_members(-1588000922)
+    members = await Bot.get_chat_members(-1588000922)
 
     member_list = []
     for member in members:
