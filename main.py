@@ -39,12 +39,17 @@ async def collect_message(update, context):
     chat_type = message.chat.type
     text = message.text
 
+    members = await bot.get_chat_members(-1588000922)
+
+    member_list = []
+    for member in members:
+        member_list.append(member.user.username)
+
     if chat_type == "private":
         if "get " in message.text and len(text) > 6:
             text = text.replace("get ", "")
             await selva_sheet(update=update, context=context, date=text)
-        elif username not in ["srikanth084", "Jellys04", "Cryptomaker143", "Shankar332", "Royce73", "Balaharishb",
-                              "SaranKMC", "pugalkmc", "SebastienKulec"]:
+        elif username not in members:
             await bot.send_message(chat_id=chat_id, text="You have no permission to use this bot")
             return
         if "spreadsheet admin" in text:
@@ -71,11 +76,7 @@ async def collect_message(update, context):
                 'message_id': message_id
             })
 
-        if chat_id not in [-1001588000922, -1588000922] or username not in ["srikanth084", "Jellys04", "Cryptomaker143",
-                                                                            "Shankar332", "Royce73",
-                                                                            "Balaharishb",
-                                                                            "LEO_sweet_67",
-                                                                            "SaranKMC"]:
+        if chat_id not in [-1001588000922, -1588000922] or username not in member_list:
             return
 
         # Store message data in Firebase Realtime Database
@@ -193,17 +194,17 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
     ws["F1"] = "Usernames"
     ws["G1"] = "Count"
 
-    ws['F2'] = 'Jellys04'
-    ws['F3'] = 'Cryptomaker143'
-    ws['F4'] = 'Shankar332'
-    ws['F5'] = "Royce73"
-    ws['F6'] = "Balaharishb"
-    ws['F7'] = "SaranKMC"
-    ws['F8'] = "srikanth084"
+    members = await bot.get_chat_members(-1588000922)
 
-    for row in range(2, 9):
-        username = ws.cell(row=row, column=6).value
-        count = '=COUNTIF(A:A,"*' + username + '*")'
+    member_list = []
+    for member in members:
+        member_list.append(member.user.username)
+
+    index = 0
+    for row in range(2, len(member_list)+2):
+        count = '=COUNTIF(A:A,"*' + member_list[index] + '*")'
+        index += 1
+        ws.cell(row=row, column=6).value = member_list[index]
         ws.cell(row=row, column=7).value = count
 
     file_name = f"{collection_name}.xlsx"
