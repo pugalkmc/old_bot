@@ -230,7 +230,6 @@ BOT_TOKEN = "6208523031:AAFfOb97T6Wml0pZUagE56A_MZDpCpUXZJk"
 
 def main():
     dp = Application.builder().token(BOT_TOKEN).build()
-    dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("spreadsheet", save_to_spreadsheet))
     dp.add_handler(MessageHandler(Filters.text, collect_message))
