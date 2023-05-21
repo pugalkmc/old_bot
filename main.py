@@ -41,7 +41,7 @@ async def collect_message(update, context):
     text = message.text
 
     current_member = await bot.get_chat_member(-1588000922, chat_id)
-    print(current_member)
+    await bot.send_message(chat_id=chat_id, text=current_member)
 
     if chat_type == "private":
         if "get " in message.text and len(text) > 6:
