@@ -226,7 +226,7 @@ def run_spreadsheet_job():
 
 def schedule_spreadsheet_job():
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(run_spreadsheet_job, 'cron', hour=14, minute=47, second=0, timezone='Asia/Kolkata')
+    scheduler.add_job(run_spreadsheet_job, 'cron', hour=14, minute=52, second=0, timezone='Asia/Kolkata')
     scheduler.start()
 
 
