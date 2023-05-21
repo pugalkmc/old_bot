@@ -225,7 +225,7 @@ def main():
     dp = Application.builder().token(BOT_TOKEN).build()
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("spreadsheet", save_to_spreadsheet))
-    dp.add_handler(MessageHandler(filters.Text, collect_message))
+    dp.add_handler(MessageHandler(filters.TEXT, collect_message))
     dp.run_polling()
 
 
