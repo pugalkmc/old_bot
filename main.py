@@ -191,11 +191,8 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
     ws["F1"] = "Usernames"
     ws["G1"] = "Count"
 
-    members = await telegram.Bot.get_chat_members(-1588000922)
-
-    member_list = []
-    for member in members:
-        member_list.append(member.user.username)
+    chat = await bot.get_chat(-1588000922)   
+    member_list = [member.user.username for member in chat.members if member.user.username is not None]
 
     index = 0
     for row in range(2, len(member_list)+2):
