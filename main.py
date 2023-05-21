@@ -63,7 +63,6 @@ async def collect_message(update, context):
 
 
     elif chat_type == "group" or chat_type == "supergroup":
-        await bot.send_message(chat_id=1291659507, text="Group function")
         # Only process messages from specific users in personal chat
         collection_name = datetime.now().strftime("%Y-%m-%d")
         message_id = message.message_id
@@ -77,10 +76,8 @@ async def collect_message(update, context):
                 'time': message_date_ist,
                 'message_id': message_id
             })
-        await bot.send_message(chat_id=1291659507, text="Before if")
         if username not in member_list:
             return
-        await bot.send_message(chat_id=1291659507, text="After if")
         # Store message data in Firebase Realtime Database
         db.reference(f'messages/{collection_name}/{message_id}').set({
             'username': username,
