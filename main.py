@@ -200,9 +200,9 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
     index = 0
     for row in range(2, len(member_list)+1):
         count = '=COUNTIF(A:A,"*' + member_list[index] + '*")'
-        index += 1
         ws.cell(row=row, column=6).value = member_list[index]
         ws.cell(row=row, column=7).value = count
+        index += 1
 
     file_name = f"{collection_name}.xlsx"
     wb.save(file_name)
