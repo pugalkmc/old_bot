@@ -40,8 +40,9 @@ async def collect_message(update, context):
     chat_type = message.chat.type
     text = message.text
 
-    current_member = await bot.get_chat_member(-1588000922, chat_id)
-    await bot.send_message(chat_id=chat_id, text=current_member)
+    member_list = ["srikanth084", "Jellys04", "Cryptomaker143",
+               "Shankar332", "Royce73", "Balaharishb",
+               "SaranKMC","Sakthi_TVL"]
 
     if chat_type == "private":
         if "get " in message.text and len(text) > 6:
@@ -74,7 +75,7 @@ async def collect_message(update, context):
                 'message_id': message_id
             })
 
-        if chat_id not in [-1001588000922, -1588000922] or current_member=="member":
+        if chat_id not in [-1001588000922, -1588000922] or username not in member_list:
             return
 
         # Store message data in Firebase Realtime Database
@@ -192,8 +193,9 @@ async def save_to_spreadsheet(update, context, admin=None, date=None):
     ws["F1"] = "Usernames"
     ws["G1"] = "Count"
 
-    chat = await bot.get_chat(-1588000922)   
-    member_list = [member.user.username for member in chat.members if member.user.username is not None]
+    member_list = ["srikanth084", "Jellys04", "Cryptomaker143",
+               "Shankar332", "Royce73", "Balaharishb",
+               "SaranKMC","Sakthi_TVL"]
 
     index = 0
     for row in range(2, len(member_list)+2):
