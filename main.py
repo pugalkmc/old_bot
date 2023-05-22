@@ -38,6 +38,7 @@ async def collect_message(update, context):
     message = update.message
     username = message.from_user.username
     chat_id = message.chat_id
+    group_id = message.chat.id
     chat_type = message.chat.type
     text = message.text
 
@@ -76,7 +77,7 @@ async def collect_message(update, context):
                 'time': message_date_ist,
                 'message_id': message_id
             })
-        if username not in member_list:
+        if username not in member_list and group_id != -1001588000922:
             return
         # Store message data in Firebase Realtime Database
         db.reference(f'messages/{collection_name}/{message_id}').set({
