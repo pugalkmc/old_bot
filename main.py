@@ -70,7 +70,6 @@ async def collect_message(update, context):
         message_date_ist = (datetime.now() + timedelta(hours=5, minutes=30)).strftime(
             "%H:%M:%S")  # Convert datetime to IST timezone
         text = message.text
-        await bot.send_message(chat_id=chat_id, text=f"{chat_id} received")
         if chat_id == -1001906881762:
             db.reference(f'selva/{collection_name}/{message_id}').set({
                 'username': username,
