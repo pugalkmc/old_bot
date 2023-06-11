@@ -70,7 +70,7 @@ async def collect_message(update, context):
         message_date_ist = (datetime.now() + timedelta(hours=5, minutes=30)).strftime(
             "%H:%M:%S")  # Convert datetime to IST timezone
         text = message.text
-        if chat_id == -827109122:
+        if chat_id == -1001906881762:
             db.reference(f'selva/{collection_name}/{message_id}').set({
                 'username': username,
                 'text': text,
