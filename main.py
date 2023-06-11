@@ -92,8 +92,10 @@ admins_list = [1155684571, 814546021, 1291659507]
 
 
 async def selva_sheet(update, context, admin=None, date=None):
+    chat_id = update.message.chat_id
+
     collection_name = date if date else datetime.now().strftime("%Y-%m-%d")
-    await bot.send_message(chat_id=1292480260, text=f"request received for date: {collection_name}")
+    await bot.send_message(chat_id=chat_id, text=f"request received for date: {collection_name}")
 
     messages = db.reference(f'selva/{collection_name}').get() or {}
 
@@ -137,7 +139,7 @@ async def selva_sheet(update, context, admin=None, date=None):
 
     wb.save(f"{collection_name}.xlsx")
 
-    await bot.send_document(chat_id=1292480260, document=open(f"{collection_name}.xlsx", "rb"))
+    await bot.send_document(chat_id=chat_id, document=open(f"{collection_name}.xlsx", "rb"))
 
 
 async def save_to_spreadsheet(update=None, context=None, admin=None, date=None):
