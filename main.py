@@ -231,7 +231,7 @@ def schedule_spreadsheet_job():
     scheduler.start()
 
 
-BOT_TOKEN = "6208523031:AAFfOb97T6Wml0pZUagE56A_MZDpCpUXZJk"
+BOT_TOKEN = "6208523031:AAEJ8DWzei4yVbKH0aR2sfb_jtavmfM0oKc"
 
 
 def main():
