@@ -121,19 +121,20 @@ async def selva_sheet(update, context, admin=None, date=None):
     msg_dict = {}
     row = 2
     for message_id, message_data in messages.items():
-        username = message_data.get('username')
-        text = message_data.get('text')
-        time = message_data.get('time')
-        new_li.append([username, text, time])
-        ws.cell(row=row, column=1).value = username
-        ws.cell(row=row, column=2).value = text
-        ws.cell(row=row, column=3).value = time
-        row += 1
+        if message_data is not None:
+            username = message_data.get('username')
+            text = message_data.get('text')
+            time = message_data.get('time')
+            new_li.append([username, text, time])
+            ws.cell(row=row, column=1).value = username
+            ws.cell(row=row, column=2).value = text
+            ws.cell(row=row, column=3).value = time
+            row += 1
 
-        if username in msg_dict:
-            msg_dict[username] += 1
-        else:
-            msg_dict[username] = 1
+            if username in msg_dict:
+                msg_dict[username] += 1
+            else:
+                msg_dict[username] = 1
     wb.save(f"{collection_name}.xlsx")
     row = 1
     for i in msg_dict:
@@ -144,6 +145,7 @@ async def selva_sheet(update, context, admin=None, date=None):
     wb.save(f"{collection_name}.xlsx")
 
     await bot.send_document(chat_id=chat_id, document=open(f"{collection_name}.xlsx", "rb"))
+
 
 
 
